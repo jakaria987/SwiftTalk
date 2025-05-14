@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const NotFound = () => {
   return (
-    <section className="bg-white dark:bg-teal-600">
+    <section className="bg-white dark:bg-teal-900">
       <div className="py-8 px-4 mx-auto lg:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-sm text-center">
           <img
