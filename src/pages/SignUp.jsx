@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import toast, { Toaster } from "react-hot-toast";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUp = () => {
+  const auth = getAuth();
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
     password: "",
   });
-
   const handleName = (e) => {
     setUserInfo((prev) => {
       return {
@@ -25,7 +26,6 @@ const SignUp = () => {
       };
     });
   };
-
   const handlePassword = (e) => {
     setUserInfo((prev) => {
       return {
@@ -34,29 +34,40 @@ const SignUp = () => {
       };
     });
   };
-
   const handleSignUp = (e) => {
     e.preventDefault();
 
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+
     if (!userInfo.name || !userInfo.email || !userInfo.password) {
       toast.error("You must provide information in all fields");
-      return;
-    }
-
-    const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-    if (!emailRegex.test(userInfo.email)) {
+    } else if (!emailRegex.test(userInfo.email)) {
       toast.error("Invalid email address");
-      return;
-    }
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-    if (!passwordRegex.test(userInfo.password)) {
+    } else if (!passwordRegex.test(userInfo.password)) {
       toast.error(
         "Password must contain at least one uppercase, one lowercase letter, and be at least 6 characters long."
       );
-      return;
+    } else {
+      createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          toast.success("Signed Up Successfully");
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          // const errorMessage = error.message;
+          if (errorCode.includes("auth/email-already-in-use")) {
+            toast.error("Email already exist, try another one");
+            setUserInfo({
+              name: "",
+              email: "",
+              password: "",
+            });
+          }
+        });
     }
-
-    toast.success("DONE");
   };
 
   return (
@@ -79,6 +90,7 @@ const SignUp = () => {
             </label>
             <input
               onChange={handleName}
+              value={userInfo.name}
               type="text"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 dark:bg-gray-800 dark:border-gray-700 dark:text-white transition"
               placeholder="Enter your username"
@@ -91,6 +103,7 @@ const SignUp = () => {
             </label>
             <input
               onChange={handleEmail}
+              value={userInfo.email}
               type="text"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 dark:bg-gray-800 dark:border-gray-700 dark:text-white transition"
               placeholder="someone@gmail.com"
@@ -103,6 +116,7 @@ const SignUp = () => {
             </label>
             <input
               onChange={handlePassword}
+              value={userInfo.password}
               type="password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 dark:bg-gray-800 dark:border-gray-700 dark:text-white transition"
               placeholder="••••••••"
