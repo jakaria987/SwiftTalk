@@ -1,15 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import toast, { Toaster } from "react-hot-toast";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from "firebase/auth";
+import { app, auth } from "../firebase.config";
+import { useNavigate } from "react-router";
 
 const SignUp = () => {
-  const auth = getAuth();
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
   const handleName = (e) => {
     setUserInfo((prev) => {
       return {
@@ -51,9 +57,20 @@ const SignUp = () => {
     } else {
       createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
         .then((userCredential) => {
-          const user = userCredential.user;
-          toast.success("Signed Up Successfully");
-          console.log(user);
+          sendEmailVerification(auth.currentUser).then(() => {
+            updateProfile(auth.currentUser, {
+              displayName: userInfo.name,
+            })
+              .then(() => {
+                const user = userCredential.user;
+                toast.success("Signed Up Successfully");
+                console.log(user);
+                navigate("/sign-in");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          });
         })
         .catch((error) => {
           const errorCode = error.code;
