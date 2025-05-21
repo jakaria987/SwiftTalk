@@ -88,61 +88,61 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-700 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-800 p-4">
       <Toaster position="top-right" reverseOrder={true} />
-      <div className="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl p-8 w-full max-w-md transition-transform duration-500 hover:scale-105">
+      <div className="bg-gray-950 text-white border border-white rounded-3xl p-8 w-full max-w-md shadow-lg transition duration-300 hover:bg-black">
         <div className="text-center mb-6">
-          <h1 className="text-4xl font-extrabold text-gray-800 dark:text-[#14B8A6] mb-2 animate-fade-in">
-            SwiftTalk 🚀
+          <h1 className="text-4xl font-extrabold text-white mb-2 animate-fade-in">
+            SwiftTalk 💬
           </h1>
-          <p className="text-gray-500 dark:text-gray-300 animate-fade-in delay-100">
+          <p className="text-white italic animate-fade-in delay-100">
             Connect, chat & build your network instantly.
           </p>
         </div>
 
         <form onSubmit={handleSignUp} className="space-y-5">
           <div>
-            <label className="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <label className="block mb-1 text-md font-semibold text-white ">
               Username
             </label>
             <input
               onChange={handleName}
               value={userInfo.name}
               type="text"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 dark:bg-gray-800 dark:border-gray-700 dark:text-white transition"
+              className="w-full px-4 py-2 bg-black text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-200"
               placeholder="Enter your username"
             />
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <label className="block mb-1 text-md font-semibold text-white">
               Email
             </label>
             <input
               onChange={handleEmail}
               value={userInfo.email}
               type="text"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 dark:bg-gray-800 dark:border-gray-700 dark:text-white transition"
+              className="w-full px-4 py-2 bg-black text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-200"
               placeholder="someone@gmail.com"
             />
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <label className="block mb-1 text-md font-semibold text-white">
               Password
             </label>
             <input
               onChange={handlePassword}
               value={userInfo.password}
               type="password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 dark:bg-gray-800 dark:border-gray-700 dark:text-white transition"
+              className="w-full px-4 py-2 bg-black text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-200"
               placeholder="••••••••"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-transform transform hover:scale-105 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:focus:ring-indigo-700"
+            className="w-full flex items-center justify-center gap-2 bg-white text-black font-semibold py-2.5 rounded-lg hover:bg-gray-300 hover:text-black shadow transition duration-300"
           >
             <svg
               className="w-5 h-5 text-white animate-pulse"
@@ -161,11 +161,11 @@ const SignUp = () => {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6 animate-fade-in delay-200">
+        <p className="text-center text-md text-white font-bold mt-6 animate-fade-in delay-200">
           Already a member?{" "}
           <Link
             to="/sign-in"
-            className="text-indigo-400 hover:underline font-semibold"
+            className="text-gray-300 hover:text-gray-100 hover:text-lg transition-all font-semibold"
           >
             Log in here
           </Link>

@@ -4,7 +4,7 @@ import SideBar from '../Components/SideBar'
 
 const RootLayout = () => {
   return (
-    <div>
+    <div className='ml-[220px] p-6'>
         <SideBar></SideBar>
         <Outlet></Outlet>
     </div>

@@ -32,7 +32,7 @@
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.8s ease-out both;
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
 /* For sign up animation */

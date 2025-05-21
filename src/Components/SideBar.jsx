@@ -1,4 +1,3 @@
-// Sidebar.jsx
 import './Sidebar.css';
 import { FaHome, FaEnvelope, FaBell, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
