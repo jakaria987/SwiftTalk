@@ -6,8 +6,9 @@ import {
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
-import { app, auth } from "../firebase.config";
+import {auth } from "../firebase.config";
 import { useNavigate } from "react-router";
+
 
 const SignUp = () => {
   const [userInfo, setUserInfo] = useState({

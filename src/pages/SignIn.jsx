@@ -4,8 +4,11 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import { auth } from "../firebase.config";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { userLoginInfo } from "../reduxSlice/UserSlice";
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
@@ -34,9 +37,11 @@ const SignIn = () => {
       signInWithEmailAndPassword(auth, userInfo.email, userInfo.password)
         .then((userCredential) => {
           const user = userCredential.user;
+
           if (user.emailVerified) {
             toast.success("Welcome to SwiftTalk");
-            setTimeout(() => navigate("/"), 1500);
+            dispatch(userLoginInfo(user));
+            navigate("/");
             console.log(user);
           } else {
             toast.error("Please verify your email first");
