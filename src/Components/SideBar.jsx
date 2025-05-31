@@ -1,7 +1,52 @@
-import './Sidebar.css';
-import { FaHome, FaEnvelope, FaBell, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import "./Sidebar.css";
+import {
+  FaHome,
+  FaEnvelope,
+  FaBell,
+  FaCog,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { userLoginInfo } from "../reduxSlice/UserSlice";
+import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const Sidebar = () => {
+  const auth = getAuth();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(
+          userLoginInfo({
+            name: user.displayName,
+            email: user.email,
+            uid: user.uid,
+          })
+        );
+      } else {
+        dispatch(userLoginInfo(null));
+        navigate("/sign-in");
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        navigate("/sign-in");
+      })
+      .catch((error) => {
+        toast.error("Please verify your email first");
+        console.log(error);
+      });
+  };
+
   return (
     <div className="sidebar">
       <ul className="sidebar-list">
@@ -23,10 +68,12 @@ const Sidebar = () => {
         </li>
       </ul>
 
-      <div className="logout">
-        <FaSignOutAlt className="icon" />
-        <span className="logout-text">Logout</span>
-      </div>
+      <button onClick={handleSignOut}>
+        <div className="logout">
+          <FaSignOutAlt className="icon" />
+          <span className="logout-text">Logout</span>
+        </div>
+      </button>
     </div>
   );
 };

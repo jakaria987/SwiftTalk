@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import { auth } from "../firebase.config";
 import { useNavigate } from "react-router";
@@ -66,6 +70,20 @@ const SignIn = () => {
     }
   };
 
+  const provider = new GoogleAuthProvider();
+  const handleGoogleSignIn = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        dispatch(userLoginInfo(user));
+        navigate('/')
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        console.log(errorCode);
+      });
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-800 p-4">
       <Toaster position="top-right" reverseOrder={true} />
@@ -116,7 +134,7 @@ const SignIn = () => {
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 bg-white text-black font-semibold py-2.5 rounded-lg hover:bg-gray-300 hover:text-black shadow transition duration-300"
+            className="w-full flex items-center justify-center gap-2 bg-white text-black font-semibold py-2.5 rounded-lg hover:bg-gray-300 hover:text-black shadow transition duration-300 cursor-pointer"
           >
             <svg
               className="w-5 h-5 text-white animate-pulse"
@@ -134,8 +152,7 @@ const SignIn = () => {
             Sign In
           </button>
         </form>
-
-        <p className="text-center text-md text-white mt-6 animate-fade-in delay-200">
+        <p className="text-center text-md text-white mt-6 animate-fade-in delay-200 mb-4">
           Don't have an account?{" "}
           <Link
             to="/sign-up"
@@ -144,6 +161,28 @@ const SignIn = () => {
             Sign Up here
           </Link>
         </p>
+        <button
+          onClick={handleGoogleSignIn}
+          style={{
+            backgroundColor: "white",
+            color: "black",
+            border: "1px solid #ddd",
+            padding: "10px 20px",
+            borderRadius: "20px",
+            fontSize: "16px",
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            margin: "auto",
+          }}
+        >
+          <img
+            src="https://developers.google.com/identity/images/g-logo.png"
+            alt="Google logo"
+            style={{ width: "20px", height: "20px", marginRight: "10px" }}
+          />
+          Sign in with Google
+        </button>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { auth } from "../firebase.config";
-console.log(auth)
+// console.log(auth)
 const initialState = {
   value: auth.currentUser,
 };
