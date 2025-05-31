@@ -76,7 +76,8 @@ const SignIn = () => {
       .then((result) => {
         const user = result.user;
         dispatch(userLoginInfo(user));
-        navigate('/')
+        toast.success("Welcome to SwiftTalk");
+        navigate("/");
       })
       .catch((error) => {
         const errorCode = error.code;
