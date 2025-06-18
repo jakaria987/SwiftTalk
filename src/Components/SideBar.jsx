@@ -7,7 +7,7 @@ import {
   FaCog,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { userLoginInfo } from "../reduxSlice/UserSlice";
 import { useNavigate } from "react-router";
@@ -17,6 +17,8 @@ const Sidebar = () => {
   const auth = getAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state) => state.userLogin.value);
+  console.log(user);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -49,6 +51,9 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
+      <h1 className="text-white text-xl py-4 px-2">
+        Hello, {user ? user.name : ""}
+      </h1>
       <ul className="sidebar-list">
         <li>
           <FaHome className="icon" />

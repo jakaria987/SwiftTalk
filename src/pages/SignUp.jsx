@@ -6,9 +6,9 @@ import {
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
-import {auth } from "../firebase.config";
+import { auth } from "../firebase.config";
 import { useNavigate } from "react-router";
-
+import { getDatabase, ref, set } from "firebase/database";
 
 const SignUp = () => {
   const [userInfo, setUserInfo] = useState({
@@ -17,6 +17,7 @@ const SignUp = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const db = getDatabase();
   const handleName = (e) => {
     setUserInfo((prev) => {
       return {
@@ -64,9 +65,18 @@ const SignUp = () => {
             })
               .then(() => {
                 const user = userCredential.user;
-                toast.success("Signed Up Successfully");
                 console.log(user);
-                navigate("/sign-in");
+                set(ref(db, "usersList/" + user.uid), {
+                  username: user.displayName,
+                  email: user.email,
+                })
+                  .then(() => {
+                    toast.success("Signed Up Successfully");
+                    navigate("/sign-in");
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
               })
               .catch((error) => {
                 console.log(error);

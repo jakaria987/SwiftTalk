@@ -10,6 +10,7 @@ import { auth } from "../firebase.config";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { userLoginInfo } from "../reduxSlice/UserSlice";
+import { getDatabase, ref, set } from "firebase/database";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const SignIn = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const db = getDatabase();
   const handleEmail = (e) => {
     setUserInfo((prev) => {
       return {
@@ -75,9 +77,18 @@ const SignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        dispatch(userLoginInfo(user));
-        toast.success("Welcome to SwiftTalk");
-        navigate("/");
+        set(ref(db, "usersList/" + user.uid), {
+          username: user.displayName,
+          email: user.email,
+        })
+          .then(() => {
+            dispatch(userLoginInfo(user));
+            toast.success("Welcome to SwiftTalk");
+            navigate("/");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       })
       .catch((error) => {
         const errorCode = error.code;
