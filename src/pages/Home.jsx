@@ -1,5 +1,6 @@
 import React from "react";
 import UserList from "./UserList";
+import FriendRequestList from "./FriendRequestList";
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
         </h1>
       )} */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
+        <FriendRequestList></FriendRequestList>
         <UserList></UserList>
         {/* <UserList></UserList>
         <UserList></UserList>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { auth } from "../firebase.config";
 
 const UserList = () => {
@@ -14,13 +14,24 @@ const UserList = () => {
       const array = [];
       snapshot.forEach((item) => {
         if (item.key != auth.currentUser.uid) {
-          array.push(item.val());
+          array.push({ ...item.val(), id: item.key });
         }
       });
       setUserList(array);
     });
   }, []);
-  console.log(userList);
+
+  const handleFriendRequest = (item) => {
+    set(push(ref(db, "friendRequestListRef/")), {
+      senderName: auth.currentUser.displayName,
+      senderId: auth.currentUser.uid,
+      receiverName: item.username,
+      receiverId: item.id,
+    }).then(() => {
+      console.log("sent")
+    })
+  };
+
   return (
     <div className="max-w-2xl">
       <div className="p-4 max-w-md bg-white text-black rounded-lg border sm:p-8 border-gray-500 shadow-[0_4px_30px_rgba(147,51,234,0.6)] ">
@@ -54,7 +65,10 @@ const UserList = () => {
                         {item.email}
                       </p>
                     </div>
-                    <div className="inline-flex items-center text-base font-semibold bg-stone-500 hover:bg-white hover:text-black transition text-white p-1.5 rounded-md cursor-pointer">
+                    <div
+                      onClick={() => handleFriendRequest(item)}
+                      className="inline-flex items-center text-base font-semibold bg-stone-500 hover:bg-white hover:text-black transition text-white p-1.5 rounded-md cursor-pointer"
+                    >
                       <FaPlus />
                     </div>
                   </div>
