@@ -4,10 +4,13 @@ import { FaPlus } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { auth } from "../firebase.config";
+import FriendRequestList from "./FriendRequestList";
 
 const UserList = () => {
   const db = getDatabase();
   const [userList, setUserList] = useState([]);
+  const [checkRequestId, setCheckRequestId] = useState([]);
+  const [checkFriendId, setCheckFriendId] = useState([]);
   useEffect(() => {
     const userListRef = ref(db, "usersList/");
     onValue(userListRef, (snapshot) => {
@@ -21,16 +24,41 @@ const UserList = () => {
     });
   }, []);
 
+  // check request list
+  useEffect(() => {
+    const requestListRef = ref(db, "friendRequestList/");
+    onValue(requestListRef, (snapshot) => {
+      const array = [];
+      snapshot.forEach((item) => {
+        array.push(item.val().senderId + item.val().receiverId);
+      });
+      setCheckRequestId(array);
+    });
+  }, []);
+
+  useEffect(() => {
+    const requestListRef = ref(db, "friendList/");
+    onValue(requestListRef, (snapshot) => {
+      const array = [];
+      snapshot.forEach((item) => {
+        array.push(item.val().senderId + item.val().receiverId);
+      });
+      setCheckFriendId(array);
+    });
+  }, []);
+
   const handleFriendRequest = (item) => {
-    set(push(ref(db, "friendRequestListRef/")), {
+    set(push(ref(db, "friendRequestList/")), {
       senderName: auth.currentUser.displayName,
       senderId: auth.currentUser.uid,
       receiverName: item.username,
       receiverId: item.id,
     }).then(() => {
-      console.log("sent")
-    })
+      // console.log("sent");
+    });
   };
+
+  // console.log(checkRequestId);
 
   return (
     <div className="max-w-2xl">
@@ -65,12 +93,24 @@ const UserList = () => {
                         {item.email}
                       </p>
                     </div>
-                    <div
-                      onClick={() => handleFriendRequest(item)}
-                      className="inline-flex items-center text-base font-semibold bg-stone-500 hover:bg-white hover:text-black transition text-white p-1.5 rounded-md cursor-pointer"
-                    >
-                      <FaPlus />
-                    </div>
+                    {checkFriendId.includes(auth.currentUser.uid + item.id) ||
+                    checkFriendId.includes(item.id + auth.currentUser.uid) ? (
+                      <button className="text-lg">Friend</button>
+                    ) : checkRequestId.includes(
+                        auth.currentUser.uid + item.id
+                      ) ||
+                      checkRequestId.includes(
+                        item.id + auth.currentUser.uid
+                      ) ? (
+                      <button className="text-lg">Requested</button>
+                    ) : (
+                      <div
+                        onClick={() => handleFriendRequest(item)}
+                        className="inline-flex items-center text-base font-semibold bg-stone-500 hover:bg-white hover:text-black transition text-white p-1.5 rounded-md cursor-pointer"
+                      >
+                        <FaPlus />
+                      </div>
+                    )}
                   </div>
                 </li>
               );

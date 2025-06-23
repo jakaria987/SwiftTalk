@@ -1,26 +1,21 @@
-import {
-  getDatabase,
-  onValue,
-  push,
-  ref,
-  remove,
-  set,
-} from "firebase/database";
+import { getDatabase, onValue, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import { auth } from "../firebase.config";
-import toast, { Toaster } from "react-hot-toast";
 
-const FriendRequestList = () => {
+const FriendList = () => {
   const [requestList, setRequestList] = useState([]);
   const db = getDatabase();
   useEffect(() => {
-    const requestListRef = ref(db, "friendRequestList/");
+    const requestListRef = ref(db, "friendList/");
     onValue(requestListRef, (snapshot) => {
       const array = [];
       snapshot.forEach((item) => {
-        if (auth.currentUser.uid == item.val().receiverId) {
+        if (
+          auth.currentUser.uid == item.val().receiverId ||
+          auth.currentUser.uid == item.val().senderId
+        ) {
           array.push({ ...item.val(), id: item.key });
         }
       });
@@ -29,28 +24,11 @@ const FriendRequestList = () => {
   }, []);
   // console.log(requestList);
 
-  const handleAcceptFriend = (item) => {
-    set(push(ref(db, "friendList/")), {
-      ...item,
-    }).then(() => {
-      remove(ref(db, "friendRequestList/" + item.id));
-    });
-  };
-  const handleCancelRequest = (item) => {
-  remove(ref(db, "friendRequestList/" + item.id)).then(() => {
-    console.log("Request cancelled");
-    toast.error("Canceled Friend Request");
-  });
-};
-
   return (
     <div className="max-w-2xl">
       <div className="p-4 max-w-md bg-white text-black rounded-lg border sm:p-8 border-gray-500 shadow-[0_4px_30px_rgba(147,51,234,0.6)] ">
         <div className="flex justify-between items-center mb-4">
-          <Toaster position="top-center" reverseOrder={true} />
-          <h3 className="text-xl font-bold leading-none">
-            Friend Request List
-          </h3>
+          <h3 className="text-xl font-bold leading-none">Friend List</h3>
           <a href="#" className="font-bold text-xl text-black">
             <HiDotsVertical />
           </a>
@@ -71,23 +49,23 @@ const FriendRequestList = () => {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-md font-medium truncate">
-                      {item?.senderName}
-                    </p>
+                    {auth.currentUser.uid == item.senderId ? (
+                      <p className="text-md font-medium truncate">
+                        {item.receiverName}
+                      </p>
+                    ) : (
+                      <p className="text-md font-medium truncate">
+                        {item.senderName}
+                      </p>
+                    )}
                     <p className="text-md text-gray-400 truncate">nothing</p>
                   </div>
-                  <div
-                    onClick={() => handleCancelRequest(item)}
-                    className="inline-flex items-center text-base font-semibold bg-stone-500 hover:bg-white hover:text-black transition text-white px-2.5 py-1.5 rounded-md cursor-pointer"
-                  >
+                  {/* <div className="inline-flex items-center text-base font-semibold bg-stone-500 hover:bg-white hover:text-black transition text-white px-2.5 py-1.5 rounded-md cursor-pointer">
                     Cancel
                   </div>
-                  <div
-                    onClick={() => handleAcceptFriend(item)}
-                    className="inline-flex items-center text-base font-semibold bg-stone-500 hover:bg-white hover:text-black transition text-white px-2.5 py-1.5 rounded-md cursor-pointer"
-                  >
+                  <div className="inline-flex items-center text-base font-semibold bg-stone-500 hover:bg-white hover:text-black transition text-white px-2.5 py-1.5 rounded-md cursor-pointer">
                     Accept
-                  </div>
+                  </div> */}
                 </div>
               </li>
             ))}
@@ -98,4 +76,4 @@ const FriendRequestList = () => {
   );
 };
 
-export default FriendRequestList;
+export default FriendList;
