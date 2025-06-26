@@ -11,6 +11,7 @@ const UserList = () => {
   const [userList, setUserList] = useState([]);
   const [checkRequestId, setCheckRequestId] = useState([]);
   const [checkFriendId, setCheckFriendId] = useState([]);
+  const [checkBlockId, setCheckBlockId] = useState([]);
   useEffect(() => {
     const userListRef = ref(db, "usersList/");
     onValue(userListRef, (snapshot) => {
@@ -44,6 +45,17 @@ const UserList = () => {
         array.push(item.val().senderId + item.val().receiverId);
       });
       setCheckFriendId(array);
+    });
+  }, []);
+
+  useEffect(() => {
+    const requestListRef = ref(db, "blockList/");
+    onValue(requestListRef, (snapshot) => {
+      const array = [];
+      snapshot.forEach((item) => {
+        array.push(item.val().blockByUserId + item.val().blockedToUserId);
+      });
+      setCheckBlockId(array);
     });
   }, []);
 
@@ -103,6 +115,9 @@ const UserList = () => {
                         item.id + auth.currentUser.uid
                       ) ? (
                       <button className="text-lg">Requested</button>
+                    ) : checkBlockId.includes(auth.currentUser.uid + item.id) ||
+                      checkBlockId.includes(item.id + auth.currentUser.uid) ? (
+                      <button className="text-lg">Blocked</button>
                     ) : (
                       <div
                         onClick={() => handleFriendRequest(item)}
