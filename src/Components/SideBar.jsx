@@ -12,8 +12,11 @@ import { useEffect } from "react";
 import { userLoginInfo } from "../reduxSlice/UserSlice";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import { useLocation, Link } from "react-router";
 
 const Sidebar = () => {
+  const { pathname } = useLocation();
+  console.log(pathname);
   const auth = getAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,22 +57,47 @@ const Sidebar = () => {
         Hello, {user && user.name}
       </h1>
       <ul className="sidebar-list">
-        <li>
-          <FaHome className="icon" />
-          <span className="item-text">Home</span>
-        </li>
-        <li>
-          <FaEnvelope className="icon" />
-          <span className="item-text">Message</span>
-        </li>
-        <li>
+        <Link to="/">
+          <li
+            className={
+              pathname === "/" ? "sidebar-item active" : "sidebar-item"
+            }
+          >
+            <FaHome className="icon" />
+            <span className="item-text">Home</span>
+          </li>
+        </Link>
+
+        <Link to="/message">
+          <li
+            className={
+              pathname === "/message" ? "sidebar-item active" : "sidebar-item"
+            }
+          >
+            <FaEnvelope className="icon" />
+            <span className="item-text">Inbox</span>
+          </li>
+        </Link>
+
+        {/* <li
+          className={
+            pathname === "/notifications"
+              ? "sidebar-item active"
+              : "sidebar-item"
+          }
+        >
           <FaBell className="icon" />
           <span className="item-text">Notification</span>
         </li>
-        <li>
+
+        <li
+          className={
+            pathname === "/settings" ? "sidebar-item active" : "sidebar-item"
+          }
+        >
           <FaCog className="icon" />
           <span className="item-text">Settings</span>
-        </li>
+        </li> */}
       </ul>
 
       <button onClick={handleSignOut}>
