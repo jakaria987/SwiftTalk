@@ -10,17 +10,18 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { userLoginInfo } from "../reduxSlice/UserSlice";
+
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { useLocation, Link } from "react-router";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
-  console.log(pathname);
+  // console.log(pathname);
   const auth = getAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.userLogin.value);
+  const user = useSelector((state) => state.userLogin?.value);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {

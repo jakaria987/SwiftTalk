@@ -12,6 +12,7 @@ export const userSlice = createSlice({
     userLoginInfo: (state, action) => {
       state.value = action.payload;
     },
+    // userdata: (state) => {},
   },
 });
 
