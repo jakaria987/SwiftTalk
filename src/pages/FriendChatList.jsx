@@ -1,8 +1,11 @@
 import { getDatabase, onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { auth } from "../firebase.config";
+import { useDispatch } from "react-redux";
+import { chattingUser } from "../reduxSlice/chatSlice";
 
 const FriendChatList = () => {
+  const dispatch = useDispatch();
   const [chatList, setChatList] = useState([]);
   const db = getDatabase();
   useEffect(() => {
@@ -20,8 +23,18 @@ const FriendChatList = () => {
       setChatList(array);
     });
   }, []);
+  //   console.log(chatList);
 
-//   console.log(chatList);
+  let handleIndividualUser = (item) => {
+    
+    if (auth.currentUser.uid == item.senderId) {
+      dispatch(chattingUser({ name: item.receiverName, id: item.receiverId }));
+      console.log(item, "ricever")
+    } else {
+      dispatch(chattingUser({ name: item.senderName, id: item.senderId }));
+      console.log(item, "sender")
+    }
+  };
 
   return (
     <div className="flex flex-col w-2/5 border-r-2 overflow-y-auto">
@@ -36,7 +49,10 @@ const FriendChatList = () => {
       {/* end search compt */}
       {/* user list */}
       {chatList.map((item) => (
-        <div className="flex flex-row py-4 px-2 justify-center items-center border-b-2">
+        <div
+          onClick={() => handleIndividualUser(item)}
+          className="flex flex-row py-4 px-2 justify-center items-center border-b-2"
+        >
           <div className="w-1/4">
             <img
               src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
