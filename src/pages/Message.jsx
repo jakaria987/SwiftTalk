@@ -18,8 +18,8 @@ const Message = () => {
     set(push(ref(db, "chatList/")), {
       senderName: auth.currentUser.displayName,
       senderId: auth.currentUser.uid,
-      receiverName: user.name,
-      receiverId: user.id,
+      receiverName: user?.name,
+      receiverId: user?.id,
       msg: msg,
       date: `${new Date().getFullYear()} / ${
         new Date().getMonth() + 1
@@ -36,17 +36,20 @@ const Message = () => {
       const array = [];
       snapshot.forEach((item) => {
         if (
-          auth.currentUser.uid == item.val().receiverId ||
-          auth.currentUser.uid == item.val().senderId
+          (auth.currentUser.uid == item.val().receiverId &&
+            user?.id == item.val().senderId) ||
+          (auth.currentUser.uid == item.val().senderId &&
+            user?.id == item.val().receiverId)
         ) {
           array.push({ ...item.val(), id: item.key });
         }
       });
       setMsgList(array);
     });
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
-  console.log(msgList);
+  // console.log(msgList);
 
   return (
     <>
@@ -112,7 +115,6 @@ const Message = () => {
                   </div>
                 )
               )}
-              
             </div>
             <div className="py-5 flex items-center gap-4 ">
               {user && (
