@@ -1,10 +1,11 @@
 import { getDatabase, onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { auth } from "../firebase.config";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { chattingUser } from "../reduxSlice/chatSlice";
 
 const FriendChatList = () => {
+  const user = useSelector((state) => state.chatInfo.value);
   const dispatch = useDispatch();
   const [chatList, setChatList] = useState([]);
   const db = getDatabase();
@@ -26,13 +27,10 @@ const FriendChatList = () => {
   //   console.log(chatList);
 
   let handleIndividualUser = (item) => {
-    
     if (auth.currentUser.uid == item.senderId) {
       dispatch(chattingUser({ name: item.receiverName, id: item.receiverId }));
-      console.log(item, "ricever")
     } else {
       dispatch(chattingUser({ name: item.senderName, id: item.senderId }));
-      console.log(item, "sender")
     }
   };
 
@@ -51,7 +49,11 @@ const FriendChatList = () => {
       {chatList.map((item) => (
         <div
           onClick={() => handleIndividualUser(item)}
-          className="flex flex-row py-4 px-2 justify-center items-center border-b-2"
+          className={`flex flex-row py-4 px-2 ${
+            user?.id == item.senderId || user?.id == item.receiverId
+              ? "bg-gray-800 text-white"
+              : "bg-transparent"
+          } justify-center items-center border-b-2`}
         >
           <div className="w-1/4">
             <img
