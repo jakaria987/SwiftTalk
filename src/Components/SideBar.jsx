@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { userLoginInfo } from "../reduxSlice/UserSlice";
+import { userLoginInfo } from "../reduxSlice/userSlice";
 
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
