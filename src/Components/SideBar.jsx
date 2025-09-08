@@ -14,6 +14,8 @@ import { userLoginInfo } from "../reduxSlice/userSlice";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { useLocation, Link } from "react-router";
+import "./SideBar.css";
+
 
 const Sidebar = () => {
   const { pathname } = useLocation();

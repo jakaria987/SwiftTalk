@@ -60,7 +60,7 @@ const Message = () => {
         <div className="px-5 py-5 flex justify-between items-center bg-white border-b-2">
           <Toaster position="top-center" reverseOrder={true} />
           <div className="font-bold text-2xl">SwiftTalk</div>
-          <div className="w-1/2">
+          {/* <div className="w-1/2">
             <input
               type="text"
               name=""
@@ -68,7 +68,7 @@ const Message = () => {
               placeholder="search IRL"
               className="rounded-2xl bg-gray-100 py-3 px-5 w-full"
             />
-          </div>
+          </div> */}
           {user && (
             <h1 className="text-xl bg-black text-gray-300 py-2 px-2 rounded-md">
               Chat with {user?.name}
