@@ -13,10 +13,10 @@ import { userLoginInfo } from "../reduxSlice/userSlice";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { useLocation, Link } from "react-router";
-import "./Sidebar.css";
+import "./SideBar.css";
 
 
-const Sidebar = () => {
+const SideBar = () => {
   const { pathname } = useLocation();
   // console.log(pathname);
   const auth = getAuth();
@@ -112,4 +112,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SideBar;
