@@ -1,5 +1,4 @@
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import "./Sidebar.css";
 import {
   FaHome,
   FaEnvelope,
@@ -14,7 +13,7 @@ import { userLoginInfo } from "../reduxSlice/userSlice";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { useLocation, Link } from "react-router";
-import "./sidebar.css";
+import "./Sidebar.css";
 
 
 const Sidebar = () => {
