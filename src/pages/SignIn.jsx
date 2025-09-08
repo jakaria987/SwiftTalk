@@ -9,7 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { auth } from "../firebase.config";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import { userLoginInfo } from "../reduxSlice/UserSlice";
+import { userLoginInfo } from "../reduxSlice/userSlice";
 import { getDatabase, ref, set } from "firebase/database";
 
 const SignIn = () => {
